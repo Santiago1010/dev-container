@@ -10,19 +10,41 @@
 │   └── structure.txt
 ├── data
 │   ├── consul
+│   │   ├── checkpoint-signature
+│   │   ├── node-id
+│   │   ├── raft
+│   │   │   ├── peers.info
+│   │   │   ├── raft.db
+│   │   │   └── snapshots
+│   │   ├── serf
+│   │   │   ├── local.snapshot
+│   │   │   └── remote.snapshot
+│   │   └── server_metadata.json
 │   ├── grafana
 │   ├── kafka
 │   ├── minio
 │   ├── n8n
-│   ├── postgres
+│   │   ├── binaryData
+│   │   ├── config
+│   │   ├── crash.journal
+│   │   ├── git
+│   │   ├── n8nEventLog.log
+│   │   ├── nodes
+│   │   │   └── package.json
+│   │   └── ssh
+│   ├── postgres  [error opening dir]
 │   ├── prometheus
 │   ├── redis
-│   └── vault
+│   │   └── appendonlydir  [error opening dir]
+│   ├── vault
+│   ├── zookeeper
+│   └── zookeeper-log
+├── docker-compose.yml
+├── .env
 ├── .gitignore
 ├── README.md
-├── start.sh
 └── .vscode
     ├── extensions.json
     └── settings.json
 
-17 directories, 9 files
+27 directories, 21 files
