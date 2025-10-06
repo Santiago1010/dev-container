@@ -11,12 +11,13 @@
 │   ├── prometheus
 │   │   └── prometheus.yml
 │   └── vault
-│       └── config.hcl
+│       └── vault.hcl
 ├── context
 │   └── structure.txt
 ├── data
 │   ├── consul
 │   │   ├── checkpoint-signature
+│   │   ├── checks  [error opening dir]
 │   │   ├── node-id
 │   │   ├── raft
 │   │   │   ├── peers.info
@@ -25,7 +26,8 @@
 │   │   ├── serf
 │   │   │   ├── local.snapshot
 │   │   │   └── remote.snapshot
-│   │   └── server_metadata.json
+│   │   ├── server_metadata.json
+│   │   └── services  [error opening dir]
 │   ├── grafana
 │   │   ├── alerting  [error opening dir]
 │   │   ├── csv  [error opening dir]
@@ -34,22 +36,79 @@
 │   │   └── png  [error opening dir]
 │   ├── kafka
 │   ├── minio
+│   │   └── .minio.sys
+│   │       ├── buckets
+│   │       │   ├── .bloomcycle.bin
+│   │       │   │   └── xl.meta
+│   │       │   └── .usage.json
+│   │       │       └── xl.meta
+│   │       ├── config
+│   │       │   ├── config.json
+│   │       │   │   └── xl.meta
+│   │       │   └── iam
+│   │       │       └── format.json
+│   │       │           └── xl.meta
+│   │       ├── format.json
+│   │       ├── multipart
+│   │       ├── pool.bin
+│   │       │   └── xl.meta
+│   │       └── tmp
+│   │           ├── 7cf1ba32-c38f-430d-a52c-9496ac7a1108
+│   │           └── .trash
+│   │               ├── 10dc574e-7480-49d9-8851-7de6f97a33f6
+│   │               │   └── xl.meta.bkp
+│   │               ├── 138ca488-6ca1-42b7-9a53-b7d8c5d3ae41
+│   │               │   └── xl.meta.bkp
+│   │               ├── 22281cb6-31ef-4655-b9b7-c3522f0b5520
+│   │               │   └── xl.meta.bkp
+│   │               ├── 621b4d50-c72c-45e1-b0a0-706eda8105bc
+│   │               │   └── xl.meta.bkp
+│   │               ├── 89c07473-c570-4c3e-99b0-d40243a33ec4
+│   │               │   └── xl.meta.bkp
+│   │               ├── 9207b0b1-6d84-484a-9965-8e7d560ef54a
+│   │               │   └── xl.meta.bkp
+│   │               ├── c9827827-f08c-494f-9365-e0ac7294fcdc
+│   │               │   └── xl.meta.bkp
+│   │               └── f48a8fa6-3542-4954-84a5-227730fe4a34
+│   │                   └── xl.meta.bkp
 │   ├── n8n
 │   │   ├── binaryData
 │   │   ├── config
+│   │   ├── crash.journal
 │   │   ├── git
 │   │   ├── n8nEventLog-1.log
 │   │   ├── n8nEventLog-2.log
+│   │   ├── n8nEventLog-3.log
 │   │   ├── n8nEventLog.log
 │   │   ├── nodes
 │   │   │   └── package.json
 │   │   └── ssh
 │   ├── postgres  [error opening dir]
+│   ├── postgres-kong  [error opening dir]
 │   ├── prometheus
+│   │   ├── 01K6XTAGB5QZC00590N61RZXEE
+│   │   │   ├── chunks
+│   │   │   │   └── 000001
+│   │   │   ├── index
+│   │   │   ├── meta.json
+│   │   │   └── tombstones
+│   │   ├── 01K6XTAKAPH7RE8GNWWCS83KZ1
+│   │   │   ├── chunks
+│   │   │   │   └── 000001
+│   │   │   ├── index
+│   │   │   ├── meta.json
+│   │   │   └── tombstones
 │   │   ├── chunks_head
+│   │   │   └── 000001
+│   │   ├── lock
 │   │   ├── queries.active
 │   │   └── wal
-│   │       └── 00000000
+│   │       ├── 00000006
+│   │       ├── 00000007
+│   │       ├── 00000008
+│   │       ├── 00000009
+│   │       └── checkpoint.00000005
+│   │           └── 00000000
 │   ├── redis
 │   │   ├── appendonlydir  [error opening dir]
 │   │   └── dump.rdb
@@ -70,4 +129,4 @@
     ├── extensions.json
     └── settings.json
 
-39 directories, 32 files
+67 directories, 63 files

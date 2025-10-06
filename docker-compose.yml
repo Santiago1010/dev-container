@@ -3,8 +3,11 @@ services:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
     environment:
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"  # Permitir todos los comandos
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
     ports:
       - "2181:2181"
     volumes:
@@ -14,10 +17,11 @@ services:
     networks:
       - kafka-network
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      test: ["CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -38,24 +42,24 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 168
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
     volumes:
       - kafka-data:/var/lib/kafka/data
-      - ./config/kafka:/etc/kafka/config
     restart: unless-stopped
     networks:
       - kafka-network
     healthcheck:
-      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 || exit 1"]
       interval: 10s
       timeout: 10s
       retries: 5
+      start_period: 40s
 
   redis:
     image: redis:7.2-alpine
     container_name: redis
-    depends_on:
-      consul:
-        condition: service_healthy
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redispass123}
@@ -63,7 +67,7 @@ services:
       - ./data/redis:/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redispass123}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -74,9 +78,9 @@ services:
     image: hashicorp/consul:1.17
     container_name: consul
     ports:
-      - "8500:8500"  # UI y API HTTP
-      - "8600:8600/udp"  # DNS
-      - "8600:8600/tcp"  # DNS
+      - "8500:8500"
+      - "8600:8600/udp"
+      - "8600:8600/tcp"
     volumes:
       - ./config/consul/consul.json:/consul/config/consul.json:ro
       - ./data/consul:/consul/data
@@ -118,8 +122,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      kafka:
-        condition: service_healthy
     ports:
       - "5678:5678"
     environment:
@@ -160,19 +162,16 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:1.51
     container_name: jaeger
-    depends_on:
-      consul:
-        condition: service_healthy
     ports:
-      - "5775:5775/udp"   # Agent: accept zipkin.thrift over compact thrift protocol (deprecated)
-      - "6831:6831/udp"   # Agent: accept jaeger.thrift over compact thrift protocol
-      - "6832:6832/udp"   # Agent: accept jaeger.thrift over binary thrift protocol
-      - "5778:5778"       # Agent: serve configs
-      - "16686:16686"     # Query: serve frontend
-      - "14250:14250"     # Collector: accept model.proto
-      - "14268:14268"     # Collector: accept jaeger.thrift directly from clients
-      - "14269:14269"     # Admin port: health check at /
-      - "9411:9411"       # Collector: Zipkin compatible endpoint
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14250:14250"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
     environment:
       COLLECTOR_ZIPKIN_HOST_PORT: ":9411"
       COLLECTOR_OTLP_ENABLED: "true"
@@ -193,33 +192,15 @@ services:
       consul:
         condition: service_healthy
     ports:
-      - "8200:8200"  # API de Vault
+      - "8200:8200"
     environment:
       VAULT_ADDR: "http://0.0.0.0:8200"
-      VAULT_API_ADDR: "http://0.0.0.0:8200"
-      VAULT_LOCAL_CONFIG: |
-        {
-          "backend": {
-            "consul": {
-              "address": "consul:8500",
-              "path": "vault/"
-            }
-          },
-          "listener": {
-            "tcp": {
-              "address": "0.0.0.0:8200",
-              "tls_disable": 1
-            }
-          },
-          "ui": true,
-          "log_level": "info",
-          "disable_mlock": true
-        }
+      VAULT_API_ADDR: "http://vault:8200"
     cap_add:
       - IPC_LOCK
     volumes:
-      - ./data/vault/logs:/vault/logs
-      - ./data/vault/file:/vault/file
+      - ./config/vault:/vault/config:ro
+      - ./data/vault:/vault/data
     command: server
     restart: unless-stopped
     networks:
@@ -229,14 +210,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 30s
 
   prometheus:
     image: prom/prometheus:v2.48.0
     container_name: prometheus
-    depends_on:
-      consul:
-        condition: service_healthy
     ports:
       - "9090:9090"
     command:
@@ -284,17 +262,12 @@ services:
       retries: 5
       start_period: 30s
 
-  # ====== NUEVOS SERVICIOS ======
-
   minio:
-    image: minio/minio:RELEASE.2024-01-16T16-07-38Z
+    image: minio/minio:latest
     container_name: minio
-    depends_on:
-      consul:
-        condition: service_healthy
     ports:
-      - "9000:9000"      # API de MinIO
-      - "9001:9001"      # Consola Web de MinIO
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
@@ -321,7 +294,7 @@ services:
       POSTGRES_PASSWORD: ${KONG_PG_PASSWORD:-kongpassword}
       POSTGRES_DB: ${KONG_PG_DATABASE:-kong}
     ports:
-      - "5433:5432"  # Puerto diferente para evitar conflicto con postgres-n8n
+      - "5433:5432"
     volumes:
       - ./data/postgres-kong:/var/lib/postgresql/data
     restart: unless-stopped
@@ -347,7 +320,7 @@ services:
       KONG_PG_PASSWORD: ${KONG_PG_PASSWORD:-kongpassword}
       KONG_PG_DATABASE: ${KONG_PG_DATABASE:-kong}
     command: kong migrations bootstrap
-    restart: on-failure
+    restart: "no"  # Cambiado de on-failure para que no reinicie constantemente
     networks:
       - kafka-network
 
@@ -359,14 +332,12 @@ services:
         condition: service_healthy
       kong-migration:
         condition: service_completed_successfully
-      consul:
-        condition: service_healthy
     ports:
-      - "8000:8000"      # Proxy HTTP (API Gateway)
-      - "8443:8443"      # Proxy HTTPS (API Gateway)
-      - "8001:8001"      # Admin API HTTP
-      - "8444:8444"      # Admin API HTTPS
-      - "8002:8002"      # Kong Manager (UI)
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "8444:8444"
+      - "8002:8002"
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgres-kong
@@ -383,8 +354,6 @@ services:
       KONG_ADMIN_LISTEN: "0.0.0.0:8001, 0.0.0.0:8444 ssl"
       KONG_ADMIN_GUI_URL: http://localhost:8002
       
-      # Deshabilitar autenticación de Admin API para desarrollo local
-      KONG_ADMIN_GUI_AUTH: "off"
       KONG_ENFORCE_RBAC: "off"
     restart: unless-stopped
     networks:
@@ -398,9 +367,13 @@ services:
 
 volumes:
   zookeeper-data:
+    driver: local
   zookeeper-log:
+    driver: local
   kafka-data:
+    driver: local
 
 networks:
   kafka-network:
     driver: bridge
+    name: kafka-network
