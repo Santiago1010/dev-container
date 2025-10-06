@@ -2,8 +2,14 @@
 ├── config
 │   ├── consul
 │   │   └── consul.json
+│   ├── grafana
+│   │   └── provisioning
+│   │       └── datasources
+│   │           └── prometheus.yml
 │   ├── kafka
 │   │   └── server.properties
+│   ├── prometheus
+│   │   └── prometheus.yml
 │   └── vault
 │       └── config.hcl
 ├── context
@@ -21,28 +27,39 @@
 │   │   │   └── remote.snapshot
 │   │   └── server_metadata.json
 │   ├── grafana
+│   │   ├── alerting  [error opening dir]
+│   │   ├── csv  [error opening dir]
+│   │   ├── grafana.db
+│   │   ├── plugins
+│   │   └── png  [error opening dir]
 │   ├── kafka
 │   ├── minio
 │   ├── n8n
 │   │   ├── binaryData
 │   │   ├── config
-│   │   ├── crash.journal
 │   │   ├── git
 │   │   ├── n8nEventLog-1.log
+│   │   ├── n8nEventLog-2.log
 │   │   ├── n8nEventLog.log
 │   │   ├── nodes
 │   │   │   └── package.json
 │   │   └── ssh
 │   ├── postgres  [error opening dir]
 │   ├── prometheus
+│   │   ├── chunks_head
+│   │   ├── queries.active
+│   │   └── wal
+│   │       └── 00000000
 │   ├── redis
 │   │   ├── appendonlydir  [error opening dir]
 │   │   └── dump.rdb
 │   ├── vault
+│   │   └── file
 │   ├── zookeeper
 │   └── zookeeper-log
 ├── docker-compose.yml
 ├── .env
+├── .env.example
 ├── .gitignore
 ├── LICENSE
 ├── README.es.md
@@ -51,4 +68,4 @@
     ├── extensions.json
     └── settings.json
 
-27 directories, 25 files
+38 directories, 31 files
