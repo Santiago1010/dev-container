@@ -3,13 +3,13 @@ services:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
     environment:
-      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "*"  # Permitir todos los comandos
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
     ports:
       - "2181:2181"
+      - "8080:8080"
     volumes:
       - zookeeper-data:/var/lib/zookeeper/data
       - zookeeper-log:/var/lib/zookeeper/log
@@ -17,7 +17,7 @@ services:
     networks:
       - kafka-network
     healthcheck:
-      test: ["CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/commands/ruok || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -45,17 +45,19 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_LOG_RETENTION_HOURS: 168
       KAFKA_LOG_SEGMENT_BYTES: 1073741824
+      KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS: 60000
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS: 60000
     volumes:
       - kafka-data:/var/lib/kafka/data
     restart: unless-stopped
     networks:
       - kafka-network
     healthcheck:
-      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 || exit 1"]
-      interval: 10s
+      test: ["CMD-SHELL", "cub kafka-ready -b localhost:9092 1 20 || exit 1"]
+      interval: 15s
       timeout: 10s
-      retries: 5
-      start_period: 40s
+      retries: 10
+      start_period: 60s
 
   redis:
     image: redis:7.2-alpine
@@ -196,17 +198,19 @@ services:
     environment:
       VAULT_ADDR: "http://0.0.0.0:8200"
       VAULT_API_ADDR: "http://vault:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_TOKEN:-myroot}
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
     cap_add:
       - IPC_LOCK
     volumes:
       - ./config/vault:/vault/config:ro
       - ./data/vault:/vault/data
-    command: server
+    command: server -dev -dev-root-token-id=${VAULT_DEV_TOKEN:-myroot}
     restart: unless-stopped
     networks:
       - kafka-network
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8200/v1/sys/health?standbyok=true&sealedcode=200&uninitcode=200"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8200/v1/sys/health?standbyok=true"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -320,7 +324,7 @@ services:
       KONG_PG_PASSWORD: ${KONG_PG_PASSWORD:-kongpassword}
       KONG_PG_DATABASE: ${KONG_PG_DATABASE:-kong}
     command: kong migrations bootstrap
-    restart: "no"  # Cambiado de on-failure para que no reinicie constantemente
+    restart: "no"
     networks:
       - kafka-network
 
