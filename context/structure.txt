@@ -1,0 +1,28 @@
+.
+├── config
+│   ├── consul
+│   │   └── consul.json
+│   ├── kafka
+│   │   └── server.properties
+│   └── vault
+│       └── config.hcl
+├── context
+│   └── structure.txt
+├── data
+│   ├── consul
+│   ├── grafana
+│   ├── kafka
+│   ├── minio
+│   ├── n8n
+│   ├── postgres
+│   ├── prometheus
+│   ├── redis
+│   └── vault
+├── .gitignore
+├── README.md
+├── start.sh
+└── .vscode
+    ├── extensions.json
+    └── settings.json
+
+17 directories, 9 files

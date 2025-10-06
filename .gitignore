@@ -1,0 +1,24 @@
+.env
+
+# Data directories
+data/
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+
+data/zookeeper/
+data/zookeeper-log/
+
+0.Project_info
