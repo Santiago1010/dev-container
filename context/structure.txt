@@ -28,6 +28,7 @@
 │   │   ├── config
 │   │   ├── crash.journal
 │   │   ├── git
+│   │   ├── n8nEventLog-1.log
 │   │   ├── n8nEventLog.log
 │   │   ├── nodes
 │   │   │   └── package.json
@@ -35,16 +36,19 @@
 │   ├── postgres  [error opening dir]
 │   ├── prometheus
 │   ├── redis
-│   │   └── appendonlydir  [error opening dir]
+│   │   ├── appendonlydir  [error opening dir]
+│   │   └── dump.rdb
 │   ├── vault
 │   ├── zookeeper
 │   └── zookeeper-log
 ├── docker-compose.yml
 ├── .env
 ├── .gitignore
+├── LICENSE
+├── README.es.md
 ├── README.md
 └── .vscode
     ├── extensions.json
     └── settings.json
 
-27 directories, 21 files
+27 directories, 25 files
