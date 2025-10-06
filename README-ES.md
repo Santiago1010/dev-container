@@ -153,7 +153,7 @@ A continuación verás varios *flujos* con pasos sencillos que muestran cómo lo
 ### 🔄 Flujo A: Subida de archivo por usuario (ej. avatar)
 
 **Descripción:** Un usuario sube su foto de perfil a través de la aplicación web.
-**Descripción en lenguaje natural:** 
+
 1. El usuario selecciona y sube una imagen de avatar desde la interfaz web
 2. El sistema valida su identidad, almacena la imagen original y genera miniaturas automáticamente
 3. Las URLs de las imágenes se guardan en caché para acceso rápido
@@ -197,7 +197,7 @@ sequenceDiagram
 ### 🔐 Flujo B: Login y sesión
 
 **Descripción:** Un usuario inicia sesión en la plataforma educativa.
-**Descripción en lenguaje natural:**
+
 1. El usuario ingresa sus credenciales en la aplicación móvil
 2. El sistema verifica las credenciales y genera un token JWT seguro
 3. La sesión se almacena en Redis con tiempo de expiración
@@ -233,7 +233,7 @@ sequenceDiagram
 ### 🔎 Flujo C: Microservicio descubriendo otro (Consul)
 
 **Descripción:** El servicio de finanzas necesita consultar el servicio de pasarelas de pago para procesar una transacción.
-**Descripción en lenguaje natural:**
+
 1. El servicio de finanzas consulta a Consul para encontrar una instancia saludable del servicio de pasarelas de pago
 2. Consul devuelve la ubicación de una instancia disponible
 3. El servicio de finanzas se comunica directamente con la pasarela de pago para procesar la transacción
@@ -261,7 +261,7 @@ sequenceDiagram
 ### 🤖 Flujo D: Automatización con N8N para Mensajería
 
 **Descripción:** Un usuario solicita generar una imagen mediante comando de Discord.
-**Descripción en lenguaje natural:**
+
 1. Un usuario ejecuta un comando de Discord para generar una imagen con IA
 2. Discord envía el comando a N8N mediante webhook
 3. N8N recupera de forma segura la API Key de OpenAI desde Vault
@@ -294,7 +294,7 @@ sequenceDiagram
 ### 🎓 Flujo E: Creación de plan de estudios con IA y notificación por WebSocket
 
 **Descripción:** Un profesor solicita la creación de un plan de estudios personalizado usando IA, con notificación en tiempo real cuando esté listo.
-**Descripción en lenguaje natural:**
+
 1. Un profesor solicita crear un plan de estudios personalizado para un curso
 2. El sistema acepta la solicitud y la envía a procesamiento asíncrono
 3. El servicio de IA tarda 30-60 segundos en generar el plan educativo
@@ -338,7 +338,7 @@ sequenceDiagram
 ### 📅 Flujo F: Notificaciones de eventos programadas
 
 **Descripción:** El sistema notifica automáticamente a participantes de eventos 3 horas antes, 1 hora antes y 5 minutos antes del evento.
-**Descripción en lenguaje natural:**
+
 1. Un organizador crea un nuevo evento en el sistema
 2. El sistema programa automáticamente recordatorios en momentos específicos
 3. Se envían notificaciones escalonadas: 3 horas antes por email, 1 hora antes por múltiples canales, y 5 minutos antes con enlaces directos
@@ -382,7 +382,7 @@ sequenceDiagram
 ### 💬 Flujo G: Foro de discusión entre estudiantes y profesores
 
 **Descripción:** Sistema de foros donde estudiantes y profesores discuten temas y tareas con notificaciones en tiempo real.
-**Descripción en lenguaje natural:**
+
 1. Un estudiante publica un mensaje en el foro del curso
 2. El mensaje se almacena en la base de datos y se cachea para mejor rendimiento
 3. Los demás usuarios reciben notificaciones en tiempo real mediante WebSocket
@@ -419,7 +419,7 @@ sequenceDiagram
 ### 💳 Flujo H: Pasarelas de pago específicas por cliente
 
 **Descripción:** Diferentes empresas clientes pueden configurar sus propias pasarelas de pago preferidas (Stripe, PayPal, MercadoPago).
-**Descripción en lenguaje natural:**
+
 1. Una empresa cliente configura su pasarela de pago preferida en el sistema
 2. Las credenciales de la pasarela se almacenan de forma segura en Vault
 3. Cuando un usuario final realiza un pago, el sistema consulta la configuración específica de esa empresa
