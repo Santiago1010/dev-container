@@ -157,6 +157,35 @@ services:
       retries: 3
       start_period: 60s
 
+  jaeger:
+    image: jaegertracing/all-in-one:1.51
+    container_name: jaeger
+    depends_on:
+      consul:
+        condition: service_healthy
+    ports:
+      - "5775:5775/udp"   # Agent: accept zipkin.thrift over compact thrift protocol (deprecated)
+      - "6831:6831/udp"   # Agent: accept jaeger.thrift over compact thrift protocol
+      - "6832:6832/udp"   # Agent: accept jaeger.thrift over binary thrift protocol
+      - "5778:5778"       # Agent: serve configs
+      - "16686:16686"     # Query: serve frontend
+      - "14250:14250"     # Collector: accept model.proto
+      - "14268:14268"     # Collector: accept jaeger.thrift directly from clients
+      - "14269:14269"     # Admin port: health check at /
+      - "9411:9411"       # Collector: Zipkin compatible endpoint
+    environment:
+      COLLECTOR_ZIPKIN_HOST_PORT: ":9411"
+      COLLECTOR_OTLP_ENABLED: "true"
+    restart: unless-stopped
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:14269/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
 volumes:
   zookeeper-data:
   zookeeper-log:
