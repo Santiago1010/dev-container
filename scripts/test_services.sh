@@ -526,7 +526,7 @@ else
 fi
 
 total_tests=$((total_tests + 1))
-if test_http "Prometheus UI" "http://localhost:9090/" "200"; then
+if test_http "Prometheus UI" "http://localhost:9090/" "302"; then
     passed_tests=$((passed_tests + 1))
 else
     failed_tests=$((failed_tests + 1))
