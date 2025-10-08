@@ -53,23 +53,19 @@
 │   │       ├── pool.bin
 │   │       │   └── xl.meta
 │   │       └── tmp
-│   │           ├── 7cf1ba32-c38f-430d-a52c-9496ac7a1108
+│   │           ├── 4c9cc93d-8967-4309-a5af-3f73e95ad223
 │   │           └── .trash
-│   │               ├── 10dc574e-7480-49d9-8851-7de6f97a33f6
+│   │               ├── 7283164a-f96a-4939-9be8-0430757b9f9f
 │   │               │   └── xl.meta.bkp
-│   │               ├── 138ca488-6ca1-42b7-9a53-b7d8c5d3ae41
+│   │               ├── 7586cc3c-3106-4d97-b200-60a3c76e1913
 │   │               │   └── xl.meta.bkp
-│   │               ├── 22281cb6-31ef-4655-b9b7-c3522f0b5520
+│   │               ├── 81b635f8-92ed-436a-bda2-fe627d4cae1a
 │   │               │   └── xl.meta.bkp
-│   │               ├── 621b4d50-c72c-45e1-b0a0-706eda8105bc
+│   │               ├── c43e4e1f-1a00-429d-be01-121ae43ed0f7
 │   │               │   └── xl.meta.bkp
-│   │               ├── 89c07473-c570-4c3e-99b0-d40243a33ec4
+│   │               ├── dd1d8227-db21-420c-9087-490559a25f58
 │   │               │   └── xl.meta.bkp
-│   │               ├── 9207b0b1-6d84-484a-9965-8e7d560ef54a
-│   │               │   └── xl.meta.bkp
-│   │               ├── c9827827-f08c-494f-9365-e0ac7294fcdc
-│   │               │   └── xl.meta.bkp
-│   │               └── f48a8fa6-3542-4954-84a5-227730fe4a34
+│   │               └── ddb200bc-ef7c-4964-ae6c-2ac9cdb84e04
 │   │                   └── xl.meta.bkp
 │   ├── n8n
 │   │   ├── binaryData
@@ -92,22 +88,45 @@
 │   │   │   ├── index
 │   │   │   ├── meta.json
 │   │   │   └── tombstones
-│   │   ├── 01K6XTAKAPH7RE8GNWWCS83KZ1
+│   │   ├── 01K6ZSV8119P66J4HEFBAE7TPN
+│   │   │   ├── chunks
+│   │   │   │   └── 000001
+│   │   │   ├── index
+│   │   │   ├── meta.json
+│   │   │   └── tombstones
+│   │   ├── 01K72C7YKEN6BKY836ESS5W0MP
+│   │   │   ├── chunks
+│   │   │   │   └── 000001
+│   │   │   ├── index
+│   │   │   ├── meta.json
+│   │   │   └── tombstones
+│   │   ├── 01K72SZHS9E8BCS0K7DC6HZM53
+│   │   │   ├── chunks
+│   │   │   │   └── 000001
+│   │   │   ├── index
+│   │   │   ├── meta.json
+│   │   │   └── tombstones
+│   │   ├── 01K730V8854535AQSBRC5NX4W8
+│   │   │   ├── chunks
+│   │   │   │   └── 000001
+│   │   │   ├── index
+│   │   │   ├── meta.json
+│   │   │   └── tombstones
+│   │   ├── 01K730V8BQGZ11QNAVY5FZGBEF
 │   │   │   ├── chunks
 │   │   │   │   └── 000001
 │   │   │   ├── index
 │   │   │   ├── meta.json
 │   │   │   └── tombstones
 │   │   ├── chunks_head
-│   │   │   └── 000001
+│   │   │   └── 000014
 │   │   ├── lock
 │   │   ├── queries.active
 │   │   └── wal
-│   │       ├── 00000006
-│   │       ├── 00000007
-│   │       ├── 00000008
-│   │       ├── 00000009
-│   │       └── checkpoint.00000005
+│   │       ├── 00000034
+│   │       ├── 00000035
+│   │       ├── 00000036
+│   │       └── checkpoint.00000033
 │   │           └── 00000000
 │   ├── redis
 │   │   ├── appendonlydir  [error opening dir]
@@ -129,4 +148,4 @@
     ├── extensions.json
     └── settings.json
 
-67 directories, 63 files
+74 directories, 75 files

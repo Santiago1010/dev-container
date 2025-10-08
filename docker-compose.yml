@@ -16,7 +16,7 @@ services:
     networks:
       - kafka-network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:2181/commands/ruok || exit 1"]
+      test: ["CMD-SHELL", "echo stat | nc -w 2 localhost 2181 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -185,34 +185,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-
-  vault:
-    image: hashicorp/vault:1.15
-    container_name: vault
-    depends_on:
-      consul:
-        condition: service_healthy
-    ports:
-      - "8200:8200"
-      - "8201:8201"
-    environment:
-      VAULT_ADDR: "http://vault:8200"
-      VAULT_API_ADDR: "http://vault:8200"
-    cap_add:
-      - IPC_LOCK
-    volumes:
-      - ./data/vault:/vault/file
-      - ./config/vault/vault.hcl:/vault/config/vault.hcl:ro
-    command: server -config=/vault/config/vault.hcl
-    restart: unless-stopped
-    networks:
-      - kafka-network
-    healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:8200/v1/sys/health?standbyok=true&uninitcode=200&sealedcode=200 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 120s
 
   prometheus:
     image: prom/prometheus:v2.48.0
